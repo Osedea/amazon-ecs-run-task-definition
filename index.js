@@ -19,10 +19,10 @@ async function run() {
 
     // Get inputs
     const taskDefinition = core.getInput('task-definition', { required: true });
-    const container = core.getInput('container', { required: true });
-    const command = core.getInput('command', { required: true });
     const service = core.getInput('service', { required: true });
     const cluster = core.getInput('cluster', { required: true });
+    const container = core.getInput('container', { required: false });
+    const command = core.getInput('command', { required: false });
     const waitForStopped = core.getInput('wait-for-stopped', { required: false });
 
     // Fetch the configuration from a service
@@ -42,21 +42,22 @@ async function run() {
     // Starts a new task
     let taskResponse;
     try {
-      const commandList = parseCommand(command);
+      // const commandList = parseCommand(command);
       taskResponse = await ecs.runTask({
+        count: 1,
         capacityProviderStrategy: serviceResponse.capacityProviderStrategy,
         cluster: cluster,
         taskDefinition: taskDefinition,
         launchType: serviceResponse.launchType,
         networkConfiguration: serviceResponse.networkConfiguration,
-        overrides: {
-          containerOverrides: [
-            {
-              name: container,
-              command: commandList
-            }
-          ]
-        }
+        // overrides: {
+        //   containerOverrides: [
+        //     {
+        //       name: container,
+        //       command: commandList
+        //     }
+        //   ]
+        // }
       }).promise();
     } catch (error) {
       core.setFailed("Failed to start a task in ECS: " + error.message);

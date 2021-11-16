@@ -7,12 +7,6 @@ inputs:
   task-definition:
     description: 'The family and revision (family:revision) or full ARN of the task definition to run. If a revision is not specified, the latest ACTIVE revision is used.'
     required: true
-  container:
-    description: 'The name of the container that receives the override.'
-    required: true
-  command:
-    description: "The list of command to run on ECS."
-    required: true
   service:
     description: 'The name of the ECS service to use configuration.'
     required: true
@@ -20,6 +14,12 @@ inputs:
     description: "The name of the ECS service's cluster."
     required: false
     default: 'default'
+  command:
+    description: "The list of command to run on ECS."
+    required: false
+  container:
+    description: 'The name of the container that receives the override.'
+    required: false
   wait-for-stopped:
     description: 'Whether to wait for the ECS task to stopped state after starting the new task. Valid value is "true". Will default to not waiting.'
     required: false
